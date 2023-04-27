@@ -10,10 +10,12 @@ import Register from "./pages/register/Register";
 // const [loggedIn, setLoggedIn] = useState(false);
 
 // function handleAuthentication() {
+// 	// fetch authentication data
+// 	// if authenticated, then setLoggedIn: true
 // 	setLoggedIn(prevValue => setLoggedIn(!prevValue))
 // }
 
-const authRouter = createBrowserRouter([
+const unauthorizedRouter = createBrowserRouter([
     {
         path: "/",
         element: <UnauthorizedNav />,
@@ -35,5 +37,5 @@ const authRouter = createBrowserRouter([
 ]);
 
 export default function App() {
-    return <RouterProvider router={authRouter} />;
+    return <RouterProvider router={unauthorizedRouter} />;
 }
