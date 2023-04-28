@@ -1,5 +1,5 @@
-import AuthForm from "../../components/AuthForm"
+import AuthForm from "../../components/authForm/AuthForm"
 
-export default function Register() {
-    return <AuthForm isRegister={true} />;
+export default function Register({ registerUser }) {
+    return <AuthForm isRegister={true} registerUser={registerUser} />;
 }

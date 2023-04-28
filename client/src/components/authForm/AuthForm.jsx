@@ -1,8 +1,7 @@
 import { useState } from "react";
+import "./AuthForm.css";
 
-export default function AuthForm({ isRegister }) {
-    // Pass onclick function from App --> AuthForm
-
+export default function AuthForm({ isRegister, loginUser, registerUser }) {
     const [credentials, setCredentials] = useState({
         name: "",
         username: "",
@@ -13,8 +12,6 @@ export default function AuthForm({ isRegister }) {
     function handleOnChange(event) {
         const { name, value } = event.target;
 
-        console.log(credentials);
-
         setCredentials((prevValue) => {
             return {
                 ...prevValue,
@@ -24,10 +21,12 @@ export default function AuthForm({ isRegister }) {
     }
 
     return (
-        <form method="post">
+        <div className="form-container">
+            <h2>{isRegister ? "Register" : "Login"}</h2>
             {isRegister && (
                 <input
                     onChange={handleOnChange}
+                    type="text"
                     name="name"
                     value={credentials.name}
                     placeholder="Name"
@@ -56,7 +55,19 @@ export default function AuthForm({ isRegister }) {
                     placeholder="Re-enter Password"
                 />
             )}
-            <button type="submit">{isRegister ? "Register" : "Login"}</button>
-        </form>
+            <button
+                onClick={() => {
+                    if (isRegister) {
+                        registerUser(credentials);
+                    } else {
+                        loginUser(credentials);
+                    }
+                }}
+                type="submit"
+                name="submit"
+            >
+                {isRegister ? "Create Account" : "Sign In"}
+            </button>
+        </div>
     );
 }

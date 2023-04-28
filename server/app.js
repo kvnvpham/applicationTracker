@@ -1,15 +1,72 @@
-import * as dotenv from "dotenv"
-dotenv.config()
+import * as dotenv from "dotenv";
+dotenv.config();
 import express from "express";
+import session from "express-session";
 import mongoose from "mongoose";
+import User from "./models.js";
+import passport from "passport";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import bcrypt from "bcrypt";
 
 const app = express();
 
+mongoose
+    .connect("mongodb://0.0.0.0:27017/applicationUsers")
+    .then(() => console.log("Mongoose Is Connected"));
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(
+    session({
+        secret: process.env.SECRET,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
+app.use(cookieParser(process.env.SECRET));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get("/", (req, res) => {
-    return res.send("Now");
-})
+app.post("/register", (req, res) => {
+    User.findOne({ username: req.body.username })
+        .then((user) => {
+            if (user) {
+                return res.send("User Already Exists.");
+            } else {
+                const hashedPassword = bcrypt.hash(req.body.password, 10);
 
-app.listen(process.env.PORT, () => console.log("Server Started"))
+                newUser = new User({
+                    name: req.body.name,
+                    username: req.body.username,
+                    password: hashedPassword,
+                });
+                newUser
+                    .save()
+                    .then(() => res.send("Account Created Successfully"))
+                    .catch((err) => console.log(err));
+            }
+        })
+        .catch((err) => console.log(err));
+});
+
+app.post("/login", (req, res) => {
+    // Login
+});
+
+app.post("/logout", (req, res) => {
+    // Logout
+});
+
+app.get("/user", (req, res) => {
+    // Get User
+});
+
+app.listen(3000, () => console.log("Server Started"));

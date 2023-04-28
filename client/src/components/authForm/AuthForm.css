@@ -1,0 +1,27 @@
+div.form-container h2 {
+    margin: 2rem auto;
+    text-align: center;
+}
+
+input, button[type=submit] {
+    display: block;
+    width: 30%;
+    border: 0.1rem solid #eee;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin: 1rem auto;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+button[type="submit"] {
+    border: none;
+    background-color: #444;
+    color: #fff;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #555;
+}
