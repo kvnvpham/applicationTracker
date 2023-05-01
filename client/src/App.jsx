@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-    createBrowserRouter,
-    RouterProvider,
-    useNavigate,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import AuthNav from "./components/authNav/AuthNav";
@@ -18,8 +14,12 @@ import Logout from "./pages/logout/Logout";
 export default function App() {
     const [isAuthorized, setAuthorized] = useState(false);
 
-    function getUser() {
-        // Get User
+    async function getUser() {
+        const response = await axios({
+            method: "get",
+            url: "http://localhost:3000/getUser",
+            withCredentials: true,
+        });
     }
 
     async function register(credentials) {
@@ -29,7 +29,9 @@ export default function App() {
             credentials.password === credentials.checkPassword
         ) {
             if (credentials.password.length < 8) {
-                return { error: "Password is required to be 8 characters or longer." }
+                return {
+                    error: "Password is required to be 8 characters or longer.",
+                };
             } else {
                 const response = await axios({
                     method: "post",
@@ -48,13 +50,12 @@ export default function App() {
 
     async function login(credentials) {
         if (credentials.username && credentials.password) {
-            const response = await axios({
+            await axios({
                 method: "post",
                 url: "http://localhost:3000/login",
                 data: credentials,
                 withCredentials: true,
             });
-            console.log(response.data);
         }
     }
 

@@ -68,7 +68,7 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
                             navigate("/login");
                         } else if (res === "Account Created Successfully.") {
                             setError("");
-                            navigate("/");
+                            navigate("/applications");
                         } else {
                             setError(res.error);
                         }

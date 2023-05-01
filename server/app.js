@@ -1,15 +1,20 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
 import session from "express-session";
 import mongoose from "mongoose";
 import User from "./models.js";
 import passport from "passport";
+import passportConfig from "./passportConfig.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 mongoose
     .connect("mongodb://0.0.0.0:27017/applicationUsers")
@@ -17,7 +22,7 @@ mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
     session({
         secret: process.env.SECRET,
@@ -34,6 +39,7 @@ app.use(
 app.use(cookieParser(process.env.SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
+passportConfig(passport);
 
 app.post("/register", (req, res) => {
     User.findOne({ username: req.body.username })
@@ -58,22 +64,9 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    User.findOne({ username: req.body.username }).then(async (user) => {
-        if (!user) {
-            res.send("User Does Not Exist.");
-        } else {
-            console.log(req);
-
-            const passwordMatch = await bcrypt.compare(
-                req.body.password,
-                user.password
-            );
-            if (passwordMatch) {
-                res.send("Login User");
-            } else {
-                res.send("Incorrect Password");
-            }
-        }
+    passport.authenticate("local")(req, res, () => {
+        console.log(req.user);
+        res.send("Success.");
     });
 });
 
@@ -82,7 +75,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/getUser", (req, res) => {
-    // Get User
+    res.send(req.user);
 });
 
 app.listen(3000, () => console.log("Server Started"));
