@@ -9,7 +9,7 @@ export default function NavBar({ isAuth }) {
                 <header>
                     <BadgeIcon className="logo nav-style" />
                     <nav>
-                        <NavLink className="nav-item nav-style" to="/">
+                        <NavLink className="nav-item nav-style tab-active" to="/">
                             Home
                         </NavLink>
                         {isAuth ? (

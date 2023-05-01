@@ -37,20 +37,20 @@ app.use(passport.session());
 
 app.post("/register", (req, res) => {
     User.findOne({ username: req.body.username })
-        .then((user) => {
+        .then(async (user) => {
             if (user) {
-                return res.send("User Already Exists.");
+                res.send("User Already Exists.");
             } else {
-                const hashedPassword = bcrypt.hash(req.body.password, 10);
+                const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-                newUser = new User({
+                const newUser = new User({
                     name: req.body.name,
                     username: req.body.username,
                     password: hashedPassword,
                 });
-                newUser
+                await newUser
                     .save()
-                    .then(() => res.send("Account Created Successfully"))
+                    .then(() => res.send("Account Created Successfully.")) // Login User and send authentication instead of sending string
                     .catch((err) => console.log(err));
             }
         })
@@ -58,14 +58,30 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    // Login
+    User.findOne({ username: req.body.username }).then(async (user) => {
+        if (!user) {
+            res.send("User Does Not Exist.");
+        } else {
+            console.log(req);
+
+            const passwordMatch = await bcrypt.compare(
+                req.body.password,
+                user.password
+            );
+            if (passwordMatch) {
+                res.send("Login User");
+            } else {
+                res.send("Incorrect Password");
+            }
+        }
+    });
 });
 
-app.post("/logout", (req, res) => {
+app.get("/logout", (req, res) => {
     // Logout
 });
 
-app.get("/user", (req, res) => {
+app.get("/getUser", (req, res) => {
     // Get User
 });
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./AuthForm.css";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthForm({ isRegister, loginUser, registerUser }) {
     const [credentials, setCredentials] = useState({
@@ -8,6 +9,9 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
         password: "",
         checkPassword: "",
     });
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     function handleOnChange(event) {
         const { name, value } = event.target;
@@ -56,18 +60,28 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
                 />
             )}
             <button
-                onClick={() => {
+                onClick={async () => {
                     if (isRegister) {
-                        registerUser(credentials);
+                        const res = await registerUser(credentials);
+                        if (res === "User Already Exists.") {
+                            setError("");
+                            navigate("/login");
+                        } else if (res === "Account Created Successfully.") {
+                            setError("");
+                            navigate("/");
+                        } else {
+                            setError(res.error);
+                        }
                     } else {
                         loginUser(credentials);
                     }
                 }}
-                type="submit"
+                className="submit-btn"
                 name="submit"
             >
                 {isRegister ? "Create Account" : "Sign In"}
             </button>
+            <p className="error">{ error }</p>
         </div>
     );
 }
