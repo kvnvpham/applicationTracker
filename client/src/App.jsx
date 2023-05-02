@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    useNavigate,
+} from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import AuthNav from "./components/authNav/AuthNav";
@@ -12,7 +16,11 @@ import Logout from "./pages/logout/Logout";
 // TODO: Handle Authentication Events
 
 export default function App() {
-    const [isAuthorized, setAuthorized] = useState(false);
+    const [isAuthorized, setAuthorized] = useState("");
+
+    useEffect(() => {
+        getUser().then((res) => setAuthorized(res.data.id));
+    });
 
     async function getUser() {
         const response = await axios({
@@ -20,9 +28,10 @@ export default function App() {
             url: "http://localhost:3000/getUser",
             withCredentials: true,
         });
+        return response;
     }
 
-    async function register(credentials) {
+    function register(credentials) {
         if (
             credentials.name &&
             credentials.username &&
@@ -30,59 +39,94 @@ export default function App() {
         ) {
             if (credentials.password.length < 8) {
                 return {
-                    error: "Password is required to be 8 characters or longer.",
+                    error: "Please ensure password is at least 8 characters long.",
                 };
             } else {
-                const response = await axios({
+                axios({
                     method: "post",
                     url: "http://localhost:3000/register",
                     data: credentials,
                     withCredentials: true,
+                }).then((response) => {
+                    if (response.data === "Register Success.") {
+                        getUser().then((res) => setAuthorized(res.data.id));
+                        return { error: null };
+                    }
                 });
-                return response.data;
             }
         } else {
             return {
-                error: "Please fill out all fields or ensure your password matches.",
+                error: "Please fill out all fields and ensure passwords match.",
             };
         }
     }
 
-    async function login(credentials) {
+    function login(credentials) {
         if (credentials.username && credentials.password) {
-            await axios({
+            axios({
                 method: "post",
                 url: "http://localhost:3000/login",
                 data: credentials,
                 withCredentials: true,
-            });
+            })
+                .then((response) => {
+                    if (response.data === "Login Success.") {
+                        getUser().then((res) => setAuthorized(res.data.id));
+                    }
+                    return true;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return false;
+                });
+        } else {
+            return false;
         }
+    }
+
+    function logout() {
+        axios({
+            method: "get",
+            url: "http://localhost:3000/logout",
+            withCredentials: true,
+        })
+            .then((response) => {
+                setAuthorized("");
+            })
+            .catch((err) => console.log(err));
     }
 
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <AuthNav isAuth={isAuthorized} />,
+            element: <AuthNav isAuth={isAuthorized} isLoggingOut={logout} />,
             children: [
                 {
                     path: "/",
-                    element: <Home />,
+                    element: <Home isAuth={isAuthorized} />,
                 },
                 {
                     path: "/login",
-                    element: <Login loginUser={login} />,
+                    element: <Login loginUser={login} isAuth={isAuthorized} />,
                 },
                 {
                     path: "/register",
-                    element: <Register registerUser={register} />,
+                    element: (
+                        <Register
+                            registerUser={register}
+                            isAuth={isAuthorized}
+                        />
+                    ),
                 },
                 {
                     path: "/applications",
-                    element: <Applications />,
+                    element: <Applications isAuth={isAuthorized} />,
                 },
                 {
                     path: "/logout",
-                    element: <Logout />,
+                    element: (
+                        <Logout isAuth={isAuthorized} setAuth={setAuthorized} />
+                    ),
                 },
             ],
         },

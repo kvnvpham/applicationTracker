@@ -1,8 +1,12 @@
 import { useState } from "react";
 import "./AuthForm.css";
-import { useNavigate } from "react-router-dom";
 
-export default function AuthForm({ isRegister, loginUser, registerUser }) {
+export default function AuthForm({
+    isRegister,
+    loginUser,
+    registerUser,
+    isAuth,
+}) {
     const [credentials, setCredentials] = useState({
         name: "",
         username: "",
@@ -10,8 +14,6 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
         checkPassword: "",
     });
     const [error, setError] = useState("");
-
-    const navigate = useNavigate();
 
     function handleOnChange(event) {
         const { name, value } = event.target;
@@ -41,7 +43,7 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
                 type="email"
                 name="username"
                 value={credentials.username}
-                placeholder="Username"
+                placeholder="Username (Email)"
             />
             <input
                 onChange={handleOnChange}
@@ -63,17 +65,16 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
                 onClick={async () => {
                     if (isRegister) {
                         const res = await registerUser(credentials);
-                        if (res === "User Already Exists.") {
-                            setError("");
-                            navigate("/login");
-                        } else if (res === "Account Created Successfully.") {
-                            setError("");
-                            navigate("/applications");
-                        } else {
+
+                        if (res.error) {
                             setError(res.error);
                         }
                     } else {
-                        loginUser(credentials);
+                        const res = await loginUser(credentials);
+
+                        if (!res) {
+                            setError("Incorrect Username or Password.");
+                        }
                     }
                 }}
                 className="submit-btn"
@@ -81,7 +82,7 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
             >
                 {isRegister ? "Create Account" : "Sign In"}
             </button>
-            <p className="error">{ error }</p>
+            <p className="error">{error}</p>
         </div>
     );
 }

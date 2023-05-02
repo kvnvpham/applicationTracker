@@ -2,14 +2,17 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import { NavLink, Outlet } from "react-router-dom";
 import "./AuthNav.css";
 
-export default function NavBar({ isAuth }) {
+export default function NavBar({ isAuth, isLoggingOut }) {
     return (
         <>
             <div className="navbar">
                 <header>
                     <BadgeIcon className="logo nav-style" />
                     <nav>
-                        <NavLink className="nav-item nav-style tab-active" to="/">
+                        <NavLink
+                            className="nav-item nav-style tab-active"
+                            to="/"
+                        >
                             Home
                         </NavLink>
                         {isAuth ? (
@@ -21,6 +24,7 @@ export default function NavBar({ isAuth }) {
                                     Applications
                                 </NavLink>
                                 <NavLink
+                                    onClick={isLoggingOut}
                                     className="nav-item nav-style"
                                     to="/logout"
                                 >

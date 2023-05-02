@@ -56,7 +56,11 @@ app.post("/register", (req, res) => {
                 });
                 await newUser
                     .save()
-                    .then(() => res.send("Account Created Successfully.")) // Login User and send authentication instead of sending string
+                    .then(() =>
+                        passport.authenticate("local")(req, res, () => {
+                            res.send("Register Success.");
+                        })
+                    ) // Login User and send authentication instead of sending string
                     .catch((err) => console.log(err));
             }
         })
@@ -65,13 +69,17 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
     passport.authenticate("local")(req, res, () => {
-        console.log(req.user);
-        res.send("Success.");
-    });
+        res.send("Login Success.");
+    })
 });
 
-app.get("/logout", (req, res) => {
-    // Logout
+app.get("/logout", (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+    });
+    res.send("Logout Success.")
 });
 
 app.get("/getUser", (req, res) => {

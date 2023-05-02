@@ -1,6 +1,6 @@
 import "./Home.css";
 
-export default function Home() {
+export default function Home({ isAuth }) {
     return (
         <div>
             <h1>Hello World!</h1>
