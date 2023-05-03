@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./AuthForm.css";
+import CreateIcon from "@mui/icons-material/Create";
+import LoginIcon from "@mui/icons-material/Login";
 
 export default function AuthForm({ isRegister, loginUser, registerUser }) {
     const [credentials, setCredentials] = useState({
@@ -88,7 +90,15 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
                 className="login-btn"
                 name="submit"
             >
-                {isRegister ? "Create Account" : "Sign In"}
+                {isRegister ? (
+                    <>
+                        Create Account <CreateIcon className="login-icon" />
+                    </>
+                ) : (
+                    <>
+                        Sign In <LoginIcon className="login-icon" />
+                    </>
+                )}
             </button>
             <p className="error">{error}</p>
         </div>

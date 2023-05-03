@@ -1,6 +1,6 @@
 div.app-box {
     background-color: #444;
-    box-shadow: 0 0.3rem 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.3rem 0.3rem rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     margin-right: 50%;
     padding:2%;
@@ -15,6 +15,7 @@ div.app-form {
     padding: 0.5rem;
     width: 100%;
     border: 0.1rem solid #eee;
+    outline: none;
     box-sizing: border-box;
     font-size: 1.1rem;
     font-family: inherit;
@@ -30,7 +31,6 @@ textarea {
 }
 
 textarea.expand {
-    margin-bottom: 0.5rem;
     border-bottom-left-radius: 5px;
     border-radius: 0 0 5px 5px;
 }
@@ -42,11 +42,18 @@ textarea.minimize {
 button.app-submit {
     position: relative;
     float: right;
-    margin-right: 0.5rem;
-    padding: 0.2rem 0.6rem;
-    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    margin-right: 0.3rem;
+    padding: 0.2rem 0.2rem 0 0.2rem;
+    font-size: 1.1rem;
     border-radius: 50%;
     outline: none;
     border: 0.1rem solid #444;
     cursor: pointer;
+}
+
+div.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 2rem;
 }

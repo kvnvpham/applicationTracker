@@ -26,6 +26,13 @@ button.login-btn:hover {
     background-color: #555;
 }
 
+button .login-icon {
+    position: relative;
+    top: 0.1rem;
+    margin-left: auto;
+    font-size: 1.1rem;
+}
+
 p.error {
     text-align: center;
     margin-top: 2rem;

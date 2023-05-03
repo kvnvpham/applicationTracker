@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import "./Applications.css";
 import axios from "axios";
 import Card from "../../components/card/card";
+import "./Applications.css";
+import AddIcon from '@mui/icons-material/Add';
 
 export default function Applications({ isAuth }) {
     const [entry, setEntry] = useState({
@@ -111,12 +112,15 @@ export default function Applications({ isAuth }) {
                             </div>
                             {showFields && (
                                 <button className="app-submit" type="submit">
-                                    +
+                                    <AddIcon />
                                 </button>
                             )}
                         </form>
                     </div>
                     <div className="card-grid">
+                        <Card />
+                        <Card />
+                        <Card />
                         <Card />
                     </div>
                 </>
