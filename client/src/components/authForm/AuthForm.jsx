@@ -1,12 +1,7 @@
 import { useState } from "react";
 import "./AuthForm.css";
 
-export default function AuthForm({
-    isRegister,
-    loginUser,
-    registerUser,
-    isAuth,
-}) {
+export default function AuthForm({ isRegister, loginUser, registerUser }) {
     const [credentials, setCredentials] = useState({
         name: "",
         username: "",
@@ -18,6 +13,12 @@ export default function AuthForm({
     function handleOnChange(event) {
         const { name, value } = event.target;
 
+        if (name === "username" && !value.includes("@")) {
+            setError("Please enter a valid email address.");
+        } else {
+            setError("");
+        }
+
         setCredentials((prevValue) => {
             return {
                 ...prevValue,
@@ -28,10 +29,12 @@ export default function AuthForm({
 
     return (
         <div className="form-container">
-            <h2>{isRegister ? "Register" : "Login"}</h2>
+            <h2 className="auth-title">{isRegister ? "Register" : "Login"}</h2>
             {isRegister && (
                 <input
+                    autoFocus={isRegister}
                     onChange={handleOnChange}
+                    className="login"
                     type="text"
                     name="name"
                     value={credentials.name}
@@ -39,7 +42,9 @@ export default function AuthForm({
                 />
             )}
             <input
+                autoFocus={!isRegister}
                 onChange={handleOnChange}
+                className="login"
                 type="email"
                 name="username"
                 value={credentials.username}
@@ -47,6 +52,7 @@ export default function AuthForm({
             />
             <input
                 onChange={handleOnChange}
+                className="login"
                 type="password"
                 name="password"
                 value={credentials.password}
@@ -55,6 +61,7 @@ export default function AuthForm({
             {isRegister && (
                 <input
                     onChange={handleOnChange}
+                    className="login"
                     type="password"
                     name="checkPassword"
                     value={credentials.checkPassword}
@@ -72,12 +79,13 @@ export default function AuthForm({
                     } else {
                         const res = await loginUser(credentials);
 
-                        if (!res) {
-                            setError("Incorrect Username or Password.");
+                        if (res.error) {
+                            setError(res.error);
                         }
                     }
                 }}
-                className="submit-btn"
+                type="submit"
+                className="login-btn"
                 name="submit"
             >
                 {isRegister ? "Create Account" : "Sign In"}

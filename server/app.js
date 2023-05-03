@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import session from "express-session";
 import mongoose from "mongoose";
-import User from "./models.js";
+import User, { Form } from "./models.js";
 import passport from "passport";
 import passportConfig from "./passportConfig.js";
 import cors from "cors";
@@ -43,8 +43,8 @@ passportConfig(passport);
 
 app.post("/register", (req, res) => {
     User.findOne({ username: req.body.username })
-        .then(async (user) => {
-            if (user) {
+        .then(async (foundUser) => {
+            if (foundUser) {
                 res.send("User Already Exists.");
             } else {
                 const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -70,7 +70,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
     passport.authenticate("local")(req, res, () => {
         res.send("Login Success.");
-    })
+    });
 });
 
 app.get("/logout", (req, res, next) => {
@@ -79,11 +79,40 @@ app.get("/logout", (req, res, next) => {
             return next(err);
         }
     });
-    res.send("Logout Success.")
+    res.send("Logout Success.");
 });
 
-app.get("/getUser", (req, res) => {
+app.get("/get-user", (req, res) => {
     res.send(req.user);
+});
+
+app.get("/get-user-forms", (req, res) => {
+    User.findById(req.user.id)
+        .then(foundUser => {
+            if (!foundUser) {
+                return res.send(null);
+            }
+            res.send()
+        })
+})
+
+app.post("/add-data", async (req, res) => {
+    const newForm = new Form({
+        company: req.body.companyName,
+        position: req.body.position,
+        link: req.body.link,
+        description: req.body.description,
+    });
+    await newForm
+        .save()
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+
+    await User.findByIdAndUpdate(req.user.id, {
+        $push: { data: newForm },
+    })
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
 });
 
 app.listen(3000, () => console.log("Server Started"));

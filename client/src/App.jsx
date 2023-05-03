@@ -16,7 +16,7 @@ import Logout from "./pages/logout/Logout";
 // TODO: Handle Authentication Events
 
 export default function App() {
-    const [isAuthorized, setAuthorized] = useState("");
+    const [isAuthorized, setAuthorized] = useState(null);
 
     useEffect(() => {
         getUser().then((res) => setAuthorized(res.data.id));
@@ -25,13 +25,13 @@ export default function App() {
     async function getUser() {
         const response = await axios({
             method: "get",
-            url: "http://localhost:3000/getUser",
+            url: "http://localhost:3000/get-user",
             withCredentials: true,
         });
         return response;
     }
 
-    function register(credentials) {
+    async function register(credentials) {
         if (
             credentials.name &&
             credentials.username &&
@@ -42,17 +42,18 @@ export default function App() {
                     error: "Please ensure password is at least 8 characters long.",
                 };
             } else {
-                axios({
+                const response = await axios({
                     method: "post",
                     url: "http://localhost:3000/register",
                     data: credentials,
                     withCredentials: true,
-                }).then((response) => {
-                    if (response.data === "Register Success.") {
-                        getUser().then((res) => setAuthorized(res.data.id));
-                        return { error: null };
-                    }
                 });
+                if (response.data === "Register Success.") {
+                    const user = await getUser();
+                    setAuthorized(user.data.id);
+                    return { error: null };
+                }
+                return { error: "User Already Exists. Please Login." };
             }
         } else {
             return {
@@ -61,39 +62,43 @@ export default function App() {
         }
     }
 
-    function login(credentials) {
+    async function login(credentials) {
         if (credentials.username && credentials.password) {
-            axios({
-                method: "post",
-                url: "http://localhost:3000/login",
-                data: credentials,
-                withCredentials: true,
-            })
-                .then((response) => {
-                    if (response.data === "Login Success.") {
-                        getUser().then((res) => setAuthorized(res.data.id));
-                    }
-                    return true;
-                })
-                .catch((err) => {
-                    console.log(err);
-                    return false;
+            try {
+                const response = await axios({
+                    method: "post",
+                    url: "http://localhost:3000/login",
+                    data: credentials,
+                    withCredentials: true,
                 });
+
+                if (response.data === "Login Success.") {
+                    const user = await getUser();
+                    setAuthorized(user.data.id);
+                    return { error: null };
+                }
+            } catch (e) {
+                console.log(e);
+                return { error: "Incorrect Username or Password." };
+            }
+            
         } else {
-            return false;
+            return { error: "Incorrect credentials." };
         }
     }
 
-    function logout() {
-        axios({
-            method: "get",
-            url: "http://localhost:3000/logout",
-            withCredentials: true,
-        })
-            .then((response) => {
-                setAuthorized("");
+    async function logout() {
+        try {
+            const response = await axios({
+                method: "get",
+                url: "http://localhost:3000/logout",
+                withCredentials: true,
             })
-            .catch((err) => console.log(err));
+            
+            setAuthorized(null);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     const router = createBrowserRouter([

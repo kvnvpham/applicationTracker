@@ -1,9 +1,9 @@
-div.form-container h2 {
+h2.auth-title {
     margin: 2rem auto;
     text-align: center;
 }
 
-input, button.submit-btn {
+input.login, button.login-btn {
     display: block;
     width: 30%;
     border: 0.1rem solid #eee;
@@ -15,14 +15,14 @@ input, button.submit-btn {
     text-align: center;
 }
 
-button.submit-btn {
+button.login-btn {
     border: none;
     background-color: #444;
     color: #fff;
     cursor: pointer;
 }
 
-button.submit-btn:hover {
+button.login-btn:hover {
     background-color: #555;
 }
 
