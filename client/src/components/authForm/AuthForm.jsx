@@ -50,7 +50,7 @@ export default function AuthForm({ isRegister, loginUser, registerUser }) {
                 type="email"
                 name="username"
                 value={credentials.username}
-                placeholder="Username (Email)"
+                placeholder="Email"
             />
             <input
                 onChange={handleOnChange}

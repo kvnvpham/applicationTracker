@@ -1,14 +1,15 @@
 div.card {
-    margin-top: 2rem;
     border: 0.1rem solid #eee;
     outline: 0.1rem solid #ddd;
     outline-offset: -15px;
     box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
     padding: 2% 8%;
+    position: relative;
 }
 
 div.card:hover {
     outline-offset: 0;
+    transform: scale(0.95);
 }
 
 div.card-title {
@@ -20,6 +21,25 @@ div.card-title a {
     color: inherit;
 }
 
-div.card-title a h4:hover {
-    transform: scale(1.1) translateX(17px);
+div.card-title a:hover {
+    color: #444;
+}
+
+div.card p {
+    margin-bottom: 7%;
+}
+
+button.delete {
+    border: none;
+    background: transparent;
+    position: absolute;
+    bottom: 0.8rem;
+    right: 0.8rem;
+    z-index: 2;
+    cursor: pointer;
+}
+
+button.delete:hover {
+    transform: scale(1.1);
+    color: #444;
 }

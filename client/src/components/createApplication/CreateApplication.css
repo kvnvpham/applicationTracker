@@ -1,0 +1,70 @@
+div.app-box {
+    flex: 1 1 45rem;
+    background-color: #444;
+    box-shadow: 0 0.3rem 0.3rem rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 2%;
+}
+
+div.app-form {
+    width: 100%;
+    position: relative;
+}
+
+.app-field {
+    display: block;
+    padding: 0.5rem;
+    width: 100%;
+    border: 0.1rem solid #eee;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 1.1rem;
+    font-family: inherit;
+    background: #fff;
+}
+
+.app-field:focus {
+    border-bottom: 0.1rem solid #444;
+}
+
+input.expand {
+    border-radius: 5px 5px 0 0;
+}
+
+textarea {
+    resize: none;
+}
+
+textarea.expand {
+    border-bottom-left-radius: 5px;
+    border-radius: 0 0 5px 5px;
+}
+
+textarea.minimize {
+    border-radius: 5px;
+}
+
+button.app-submit {
+    position: absolute;
+    bottom: -45px;
+    margin-top: 0.5rem;
+    border-radius: 50%;
+    outline: none;
+    border: 0.1rem solid #444;
+    background: #fff;
+    cursor: pointer;
+}
+
+@media (max-width: 1125px) {
+    button.app-submit {
+        bottom: -35px;
+    }
+}
+
+button.app-submit:hover {
+    background: #eee;
+}
+
+button .add-btn {
+    font-size: 2rem;
+}

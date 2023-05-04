@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
-const formSchema = new mongoose.Schema({
+const itemSchema = new mongoose.Schema({
     company: String,
     position: String,
     link: String,
     description: String,
 });
 
-const Form = mongoose.model("Form", formSchema);
+const Item = mongoose.model("Item", itemSchema);
 
-export { Form };
+export { Item };
 
 const userSchema = new mongoose.Schema({
     name: String,
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
     password: String,
-    data: [formSchema],
+    data: [itemSchema],
 });
 
 const User = mongoose.model("User", userSchema);

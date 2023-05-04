@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    createBrowserRouter,
-    RouterProvider,
-    useNavigate,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import AuthNav from "./components/authNav/AuthNav";
@@ -12,14 +8,16 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Applications from "./pages/applications/Applications";
 import Logout from "./pages/logout/Logout";
-
-// TODO: Handle Authentication Events
+import ApplicationDetails from "./pages/applicationDetails/ApplicationDetails";
 
 export default function App() {
     const [isAuthorized, setAuthorized] = useState(null);
 
     useEffect(() => {
-        getUser().then((res) => setAuthorized(res.data.id));
+        return async () => {
+            const res = await getUser();
+            setAuthorized(res.data.id);
+        };
     });
 
     async function getUser() {
@@ -51,6 +49,7 @@ export default function App() {
                 if (response.data === "Register Success.") {
                     const user = await getUser();
                     setAuthorized(user.data.id);
+                    console.log(response.data);
                     return { error: null };
                 }
                 return { error: "User Already Exists. Please Login." };
@@ -75,13 +74,13 @@ export default function App() {
                 if (response.data === "Login Success.") {
                     const user = await getUser();
                     setAuthorized(user.data.id);
+                    console.log(response.data);
                     return { error: null };
                 }
             } catch (e) {
                 console.log(e);
                 return { error: "Incorrect Username or Password." };
             }
-            
         } else {
             return { error: "Incorrect credentials." };
         }
@@ -93,10 +92,10 @@ export default function App() {
                 method: "get",
                 url: "http://localhost:3000/logout",
                 withCredentials: true,
-            })
-            
+            });
+            console.log(response.data);
             setAuthorized(null);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
@@ -126,6 +125,14 @@ export default function App() {
                 {
                     path: "/applications",
                     element: <Applications isAuth={isAuthorized} />,
+                    children: [
+                        {
+                            path: ":id",
+                            element: (
+                                <ApplicationDetails isAuth={isAuthorized} />
+                            ),
+                        },
+                    ],
                 },
                 {
                     path: "/logout",
