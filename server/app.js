@@ -82,13 +82,16 @@ app.get("/get-user", (req, res) => {
     res.send(req.user);
 });
 
-app.get("/get-user-data", (req, res) => {
-    User.findById(req.user.id).then((foundUser) => {
+app.get("/get-user-data", async (req, res) => {
+    try {
+        const foundUser = await User.findById(req.user.id);
         if (!foundUser) {
             return res.send(null);
         }
-        res.send(foundUser);
-    });
+        return res.send(foundUser);
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 app.post("/add-data", async (req, res) => {
@@ -133,6 +136,21 @@ app.post("/delete-item", async (req, res) => {
         });
         console.log(result);
         return res.send("Deleted Item Successfully");
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+app.get("/details/:id", async (req, res) => {
+    const itemId = req.params.id;
+
+    try {
+        const result = await Item.findById(itemId);
+
+        if (!result) {
+            return res.send(null);
+        }
+        return res.send(result);
     } catch (e) {
         console.log(e);
     }

@@ -7,8 +7,10 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Applications from "./pages/applications/Applications";
+import ApplicationDetails, {
+    detailsLoader,
+} from "./pages/applicationDetails/ApplicationDetails";
 import Logout from "./pages/logout/Logout";
-import ApplicationDetails from "./pages/applicationDetails/ApplicationDetails";
 
 export default function App() {
     const [isAuthorized, setAuthorized] = useState(null);
@@ -106,15 +108,15 @@ export default function App() {
             element: <AuthNav isAuth={isAuthorized} isLoggingOut={logout} />,
             children: [
                 {
-                    path: "/",
+                    index: true,
                     element: <Home isAuth={isAuthorized} />,
                 },
                 {
-                    path: "/login",
+                    path: "login",
                     element: <Login loginUser={login} isAuth={isAuthorized} />,
                 },
                 {
-                    path: "/register",
+                    path: "register",
                     element: (
                         <Register
                             registerUser={register}
@@ -123,19 +125,16 @@ export default function App() {
                     ),
                 },
                 {
-                    path: "/applications",
+                    path: "applications",
                     element: <Applications isAuth={isAuthorized} />,
-                    children: [
-                        {
-                            path: ":id",
-                            element: (
-                                <ApplicationDetails isAuth={isAuthorized} />
-                            ),
-                        },
-                    ],
                 },
                 {
-                    path: "/logout",
+                    path: "applications/:id",
+                    element: <ApplicationDetails isAuth={isAuthorized} />,
+                    loader: detailsLoader,
+                },
+                {
+                    path: "logout",
                     element: (
                         <Logout isAuth={isAuthorized} setAuth={setAuthorized} />
                     ),

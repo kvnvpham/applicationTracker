@@ -10,7 +10,7 @@ export default function NavBar({ isAuth, isLoggingOut }) {
                     <BadgeIcon className="logo nav-style" />
                     <nav>
                         <NavLink
-                            className="nav-item nav-style tab-active"
+                            className="nav-item nav-style"
                             to="/"
                         >
                             Home

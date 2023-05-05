@@ -31,7 +31,7 @@ export default function Card({ item, updateData }) {
                     <a href={item.link}>{item.position}</a>
                 </h4>
             </div>
-            <p>{item.description.substring(0, 35)}... <LinkMore Details</p>
+            <p>{item.description.substring(0, 30)}...<Link to={`/applications/${item._id}`}>More Details</Link></p>
             {isHover && (
                 <button
                     className="delete"
