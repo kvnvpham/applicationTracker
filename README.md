@@ -4,6 +4,8 @@
 
 * [Description](#description)
 * [Installation](#installation)
+* [Project Details](#project-details)
+* [Links](#links)
 
 </details>
 
@@ -15,7 +17,7 @@ The **Application Tracker** web application utilizes Node.js backend functions a
 
 ### Dependencies
 
-The **Application Tracker ** application requires:
+The **Application Tracker** application requires:
 
 * Node.js
 * React.js
