@@ -20,16 +20,22 @@ The **Application Tracker** web application utilizes Node.js backend functions a
 The **Application Tracker** application requires:
 
 * Node.js
+    * Express
+    * Express-session
+    * Cors
+    * Bcrypt
+    * Cookie-Parser
+    * Dotenv
+    * Mongoose
+    * Passport
+    * Passport-local
 * React.js
-* Express
-* Express-session
-* Cors
-* Bcrypt
-* Cookie-Parser
-* Dotenv
-* Mongoose
-* Passport
-* Passport-local
+    * React
+    * React-DOM
+    * React-Router-DOM
+    * Material UI
+    * Axios
+    * UUID
 
 ### User Installation
 
